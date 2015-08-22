@@ -14,26 +14,15 @@ public class Driver extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					Driver frame = new Driver();
-					frame.setVisible(true);
-				} catch (Exception e) {
+				try 
+				{
+					sFrame.getInstance();
+				} 
+				catch (Exception e) 
+				{
 					e.printStackTrace();
 				}
 			}
 		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public Driver() {
-		setTitle("Mini Twitter");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 752, 464);
-		setContentPane(AdminControlPanel.getInstance());
-		
-		//Fixed size
-		setResizable(false);
 	}
 }
