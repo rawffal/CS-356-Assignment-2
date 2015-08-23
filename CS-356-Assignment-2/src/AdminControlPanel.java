@@ -16,11 +16,9 @@ import java.awt.event.ActionEvent;
 
 public class AdminControlPanel extends JPanel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private static AdminControlPanel instance = null;
+	
+	private static final long serialVersionUID = 1L;
 	private JTextField tfUserID;
 	private JTextField tfGroupID;
 	
@@ -29,6 +27,26 @@ public class AdminControlPanel extends JPanel {
 	 */
 	private AdminControlPanel() {
 		setLayout(null);
+		
+		/* Tree View */
+		JTree treeView = new JTree();
+		DefaultMutableTreeNode node = new DefaultMutableTreeNode("Root");
+		treeView.setModel(new DefaultTreeModel(
+			new DefaultMutableTreeNode("Root") 
+			{
+				public void addUser(String id)	
+				{
+//					add(new DefaultMutableTreeNode("john"));
+//					add(new DefaultMutableTreeNode("bob"));
+//					add(new DefaultMutableTreeNode("steve"));
+					add(new DefaultMutableTreeNode(id));
+				}
+			}
+		));
+		treeView.setBounds(10, 11, 383, 413);
+		add(treeView);	
+		
+		/* SCHTUFF */
 		
 		JButton btnGroupTotal = new JButton("Show Group Total");
 		btnGroupTotal.setFont(new Font("Times New Roman", Font.PLAIN, 15));
@@ -55,15 +73,12 @@ public class AdminControlPanel extends JPanel {
 		btnPositivePercentage.setBounds(590, 383, 151, 40);
 		add(btnPositivePercentage);
 		
-		JButton btnAddUser = new JButton("Add User");
-		btnAddUser.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		btnAddUser.setBounds(590, 11, 151, 40);
-		add(btnAddUser);
-		
 		JButton btnAddGroup = new JButton("Add Group");
 		btnAddGroup.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		btnAddGroup.setBounds(590, 62, 151, 40);
 		add(btnAddGroup);
+		
+		/* USER ID */
 		
 		tfUserID = new JTextField("User Id");
 		tfUserID.setFont(new Font("Times New Roman", Font.PLAIN, 22));
@@ -71,6 +86,19 @@ public class AdminControlPanel extends JPanel {
 		add(tfUserID);
 		tfUserID.setColumns(10);
 		
+		JButton btnAddUser = new JButton("Add User");
+		btnAddUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				User user = new User(tfUserID.getText());
+				node.add(new DefaultMutableTreeNode(tfUserID.getText()));	
+				
+			}
+		});
+		btnAddUser.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		btnAddUser.setBounds(590, 11, 151, 40);
+		add(btnAddUser);
+		
+		/* GROUP ID */
 		tfGroupID = new JTextField("Group Id");
 		tfGroupID.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 		tfGroupID.setColumns(10);
@@ -78,44 +106,17 @@ public class AdminControlPanel extends JPanel {
 		add(tfGroupID);
 		
 		JButton btnOpenUserView = new JButton("Open User View");
+		btnOpenUserView.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserViewFrame.getInstance();
+			}
+		});
 		btnOpenUserView.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		btnOpenUserView.setBounds(425, 113, 316, 40);
 		add(btnOpenUserView);
 		
 		
-		/* Tree View */
-		JTree treeView = new JTree();
-		treeView.setModel(new DefaultTreeModel(
-			new DefaultMutableTreeNode("Root") {
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = 1L;
-
-				{
-					DefaultMutableTreeNode node_1;
-					DefaultMutableTreeNode node_2;
-					add(new DefaultMutableTreeNode("john"));
-					add(new DefaultMutableTreeNode("bob"));
-					add(new DefaultMutableTreeNode("steve"));
-					node_1 = new DefaultMutableTreeNode("CS356");
-						node_1.add(new DefaultMutableTreeNode("stu1"));
-						node_1.add(new DefaultMutableTreeNode("stu2"));
-						node_1.add(new DefaultMutableTreeNode("stu3"));
-						node_2 = new DefaultMutableTreeNode("CS356Session01");
-							node_2.add(new DefaultMutableTreeNode("stu8"));
-							node_2.add(new DefaultMutableTreeNode("stu9"));
-							node_2.add(new DefaultMutableTreeNode("stu10"));
-						node_1.add(node_2);
-						node_1.add(new DefaultMutableTreeNode("stu4"));
-					add(node_1);
-					add(new DefaultMutableTreeNode("oostu"));
-					add(new DefaultMutableTreeNode("ppstu2"));
-				}
-			}
-		));
-		treeView.setBounds(10, 11, 383, 413);
-		add(treeView);	
+		
 	}
 	
 	public static AdminControlPanel getInstance()

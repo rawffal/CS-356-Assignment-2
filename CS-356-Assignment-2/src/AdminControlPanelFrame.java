@@ -1,16 +1,16 @@
 import javax.swing.JFrame;
 
 /**
- * Sets up Singleton pattern for the frame.
+ * Sets up Singleton pattern for the frame of Admin Control Panel
  *
  */
 
-public class sFrame extends JFrame {
+public class AdminControlPanelFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private static sFrame instance = null;
+	private static AdminControlPanelFrame instance = null;
 	
-	private sFrame() 
+	private AdminControlPanelFrame() 
 	{
 		initialize();
 	}
@@ -27,11 +27,11 @@ public class sFrame extends JFrame {
 		setVisible(true);
 	}
 	
-	public static sFrame getInstance() 
+	public static AdminControlPanelFrame getInstance() 
 	{
 		if (instance == null)
 		{
-			instance = new sFrame();
+			instance = new AdminControlPanelFrame();
 		}
 		
 		return instance;
