@@ -11,7 +11,6 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
 
 /**
  * The Admin Control Panel class will utilize a Singleton pattern scheme.
@@ -43,6 +42,11 @@ public class AdminControlPanel extends JPanel {
 	
 	private JTree tree;
 	
+	private DefaultTreeModel model;
+	
+	private DefaultMutableTreeNode selectedNode;
+	private DefaultMutableTreeNode addUser;
+	private DefaultMutableTreeNode addGroup;
 	/**
 	 * Create the panel.
 	 */
@@ -51,23 +55,22 @@ public class AdminControlPanel extends JPanel {
 		/* TREE */
 		tree = TreeViewPanel.getInstance().getTree();
 		this.add(tree);
-		button();
-		textField();
-		actionListenerForAllButtons();
-		label();
+		initialize();
 	}
 	
-	/* Widgets */
-	private void label()
+	/* Initialize Widgets */
+	private void initialize()
 	{
+		users = new ArrayList<User>();
+		groups = new ArrayList<UserGroup>();
+		
+		/* Label */
 		lMessage = new JLabel("");
 		lMessage.setForeground(Color.RED);
 		lMessage.setBounds(425, 218, 316, 14);
 		add(lMessage);
-	}
-	
-	private void textField()
-	{
+		
+		/* Text Fields */
 		tfUserID = new JTextField("");
 		tfUserID.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 		tfUserID.setBounds(425, 11, 151, 40);
@@ -79,10 +82,8 @@ public class AdminControlPanel extends JPanel {
 		tfGroupID.setColumns(10);
 		tfGroupID.setBounds(425, 62, 151, 40);
 		add(tfGroupID);
-	}
-	
-	private void button()
-	{
+		
+		/* Buttons */
 		btnMessageTotal = new JButton("Show Messages Total");
 		btnMessageTotal.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 		btnMessageTotal.setBounds(425, 384, 151, 40);
@@ -117,17 +118,14 @@ public class AdminControlPanel extends JPanel {
 		btnGroupTotal.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		btnGroupTotal.setBounds(590, 332, 151, 40);
 		add(btnGroupTotal);
-	}
-	
-	private void actionListenerForAllButtons()
-	{
+		
+		/* Action Listeners for all the Buttons */
 		btnAddUser.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
+			public void actionPerformed(ActionEvent e)
 			{
 				lMessage.setText("");
-				DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-				DefaultMutableTreeNode user;
+				model = (DefaultTreeModel) tree.getModel();
+				selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 				
 				if (selectedNode != null)
 				{
@@ -135,55 +133,57 @@ public class AdminControlPanel extends JPanel {
 					{
 						if (selectedNode.getUserObject() instanceof UserGroup)
 						{
-							user = new DefaultMutableTreeNode(new User(tfUserID.getText()));
-							model.insertNodeInto(user, selectedNode, selectedNode.getChildCount());
+							users.add(new User(tfUserID.getText()));
+							System.out.println(users); //TESTING
+							addUser = new DefaultMutableTreeNode(tfUserID.getText());
+							model.insertNodeInto(addUser, selectedNode, selectedNode.getChildCount());
 							tfUserID.setText("");
-							model.reload();
 						}
 						else if (selectedNode.getUserObject() instanceof User)
 						{
 							lMessage.setText("Can't add user within a user baby. Get on my level.");
 						}
 					}
-					else
-					{
-						lMessage.setText("Please enter a valid User ID.");
-					}
 				}
+				else
+				{
+					lMessage.setText("Please enter a valid User ID");
+				}
+				
 			}
 		});
 		
 		btnAddGroup.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lMessage.setText("");
-				DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-				DefaultMutableTreeNode newGroup;
-				
-					if (selectedNode != null)
+				model = (DefaultTreeModel) tree.getModel();
+				selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+				if (selectedNode != null)
+				{
+					if (tfGroupID.getText().trim().equals("") == false)
 					{
-						if (tfGroupID.getText().trim().equals("") == false)
+						if (selectedNode.getUserObject() instanceof User)
 						{
-							if (selectedNode.getUserObject() instanceof User)
-							{
-								lMessage.setText("Can't add group into a user. Scrub");
-							}
-							else if (!(selectedNode.getUserObject() instanceof User))
-							{
-								newGroup = new DefaultMutableTreeNode(new UserGroup(tfGroupID.getText()));
-								model.insertNodeInto(newGroup, selectedNode, selectedNode.getChildCount());
-								tfGroupID.setText("");
-							}
+							lMessage.setText("Can't add group into a user. Scrub");
 						}
-						else
+						else if (selectedNode.getUserObject() instanceof UserGroup)
 						{
-							lMessage.setText("You must enter a Group ID");
+							groups.add(new UserGroup(tfGroupID.getText()));
+							System.out.println("\n" + groups.get(groups.size() - 1)); //TESTING
+							addGroup = new DefaultMutableTreeNode(groups.get(groups.size() - 1));
+							model.insertNodeInto(addGroup, selectedNode, selectedNode.getChildCount());
+							tfGroupID.setText("");
 						}
 					}
 					else
 					{
-						lMessage.setText("You must choose a parent node to insert");
+						lMessage.setText("You must enter a Group ID");
 					}
+				}
+				else
+				{
+					lMessage.setText("You must choose a parent node to insert");
+				}
 			}
 		});
 		
@@ -218,6 +218,7 @@ public class AdminControlPanel extends JPanel {
 				lMessage.setText("Total of User Groups: " + UserGroup.getGroupCounter());
 			}
 		});
+
 		
 	}
 	

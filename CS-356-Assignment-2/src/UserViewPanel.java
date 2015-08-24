@@ -104,7 +104,7 @@ public class UserViewPanel extends JPanel {
 		btnFollowUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String userId = tfUserId.getText();
-				System.out.println(userId); //testing
+				
 				DefaultMutableTreeNode root = (DefaultMutableTreeNode)tree.getModel().getRoot();
 				if (checkForUser(root, userId) == true)
 				{
