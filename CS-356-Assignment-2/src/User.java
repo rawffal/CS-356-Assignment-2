@@ -1,6 +1,6 @@
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Observable;
+import java.util.HashMap;import java.util.Observable;
+import java.util.Observer;
 
 
 /*
@@ -12,64 +12,57 @@ import java.util.Observable;
 
 public class User extends Observable {
 
+	private static int userCounter = 0;
+	
 	private String id = null;
-	private ArrayList<String> usersFollowing = new ArrayList<String>();
-	private ArrayList<String> usersFollowed = new ArrayList<String>();
-	private HashMap<String, String> newsFeed = new HashMap<String, String>();
+	private ArrayList<User> usersFollowing; //list of ids following this user
+	private ArrayList<User> usersFollowed; //list of ids followed by this user
+	private ArrayList<String> newsFeed;
 	
 	public User(String id)
 	{
 		this.id = id;
-		
+		usersFollowing = new ArrayList<User>();
+		usersFollowed = new ArrayList<User>();
+		newsFeed = new ArrayList<String>();
+		++userCounter;
 	}
 	
-	public void addFollowing(String id)
+	public String toString()
 	{
-		usersFollowing.add(id);
-		
+		return this.id;
 	}
 	
-	public void addFollowed(String id)
+	//add users that are followed by this user
+	public void addFollowed(User id)
 	{
 		usersFollowed.add(id);
+		notifyObservers(id);
 	}
 	
-	//messages that the user is following
-	public void newsFeedList(String id, String message)
-	{
-		//If bob is the user you are following...
-		for (int i = 0; i < usersFollowing.size(); ++i)
-		{
-			if (usersFollowing.get(i) == id)
-			{
-				newsFeed.put(id, message);
-			}
-		}
-	}
-	
-	public ArrayList<String> getFollowing()
+	public ArrayList<User> getFollowing()
 	{
 		return usersFollowing;
 	}
 	
-	public ArrayList<String> getFollowed()
+	public ArrayList<User> getFollowed()
 	{
 		return usersFollowed;
 	}
 	
-	public HashMap<String, String> getNewsFeed()
+	public ArrayList<String> getNewsFeed()
 	{
 		return newsFeed;
 	}
+
+	public static String getTotalUsers()
+	{
+		String result = Integer.toString(userCounter);
+		return result;
+	}
+
 	
-	//TODO: choose to follow other users by providing the target USER ID.
-	//Subject: users
-	//Observer: users following them
 	
-	
-	
-	//TODO: post a short Tweet message, so that followers can see this message in their news feed list.
-	// User could see its own message.
 	
 	
 }
