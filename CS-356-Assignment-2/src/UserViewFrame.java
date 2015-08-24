@@ -9,6 +9,7 @@ public class UserViewFrame extends JFrame {
 	{
 		setLayout(null);
 		setTitle(user.toString());
+//		setDefaultCloseOperation(UserViewFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 480, 432);
 		setContentPane(new UserViewPanel(user));
 		setResizable(false);

@@ -1,6 +1,7 @@
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Enumeration;
 
 import javax.swing.AbstractListModel;
@@ -22,49 +23,39 @@ public class UserViewPanel extends JPanel {
 	private JTextField tfTweetMessage;
 	private JTree tree;
 	private TreeViewPanel treeView;
-	private User user;
+	private User thisUser;
+	
 	private JList lCurrentFollowing;
+	private JList lNewsFeed;
 	
 	private JButton btnFollowUser;
 	private JButton btnPostTweet;
 	
-	private DefaultListModel listModel;   
+	private DefaultListModel listModelFollow;
+	private DefaultListModel listModelNews;
+	
+	private DefaultMutableTreeNode root; 
+	
+	private ArrayList<User> users;
 	
 	/**
 	 * Create the panel.
 	 */
 	public UserViewPanel(User user) {
 		
-		this.user = user;
-		tree = TreeViewPanel.getInstance().getTree();
-		textFieldSetup();
-		buttonSetup();
-		actionListenerForAllButtons();
+		this.thisUser = user;
+		users = new ArrayList<User>();
+		initialize();
 		
 		setBounds(100, 100, 351, 406);
 		setLayout(null);
 		
-		lCurrentFollowing = new JList();
-		listModel = new DefaultListModel();
 		
-		lCurrentFollowing = new JList(listModel);
-		
-		lCurrentFollowing.setBounds(10, 74, 330, 119);
-		add(lCurrentFollowing);
-		
-		JList lNewsFeed = new JList();
-		lNewsFeed.setModel(new AbstractListModel() {
-			String[] values = new String[] {};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
-		lNewsFeed.setBounds(10, 269, 330, 119);
-		add(lNewsFeed);	
-		
+	}
+	
+	private void initialize()
+	{
+		/* LABEL */
 		JLabel lblNewsFeed = new JLabel("News Feed");
 		lblNewsFeed.setBounds(10, 245, 160, 13);
 		add(lblNewsFeed);
@@ -72,10 +63,8 @@ public class UserViewPanel extends JPanel {
 		JLabel lblCurrentFollowing = new JLabel("Current Following");
 		lblCurrentFollowing.setBounds(10, 52, 160, 13);
 		add(lblCurrentFollowing);
-	}
-	
-	private void textFieldSetup()
-	{
+		
+		/* TEXT FIELD */
 		tfUserId = new JTextField();
 		tfUserId.setBounds(10, 11, 160, 30);
 		tfUserId.setColumns(10);
@@ -86,10 +75,7 @@ public class UserViewPanel extends JPanel {
 		tfTweetMessage.setBounds(10, 204, 160, 30);
 		add(tfTweetMessage);
 		
-	}
-	
-	private void buttonSetup()
-	{
+		/* BUTTONS */
 		btnPostTweet = new JButton("Post Tweet");
 		btnPostTweet.setBounds(180, 204, 160, 30);
 		add(btnPostTweet);
@@ -97,48 +83,62 @@ public class UserViewPanel extends JPanel {
 		btnFollowUser = new JButton("Follow User");
 		btnFollowUser.setBounds(180, 11, 160, 30);
 		add(btnFollowUser);
-	}
-	
-	private void actionListenerForAllButtons()
-	{
+		
+		/* LIST */
+		lCurrentFollowing = new JList();
+		listModelFollow = new DefaultListModel();
+		lCurrentFollowing = new JList(listModelFollow);
+		lCurrentFollowing.setBounds(10, 74, 330, 119);
+		add(lCurrentFollowing);
+		
+		lNewsFeed = new JList();
+		listModelNews = new DefaultListModel();
+		lNewsFeed = new JList(listModelNews);
+		lNewsFeed.setBounds(10, 269, 330, 119);
+		add(lNewsFeed);	
+		
+		/* ACTION LISTENER */
 		btnFollowUser.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String userId = tfUserId.getText();
+			public void actionPerformed(ActionEvent e)
+			{
+				String userID = tfUserId.getText();
+				users = new ArrayList<User>(AdminControlPanel.getInstance().getUsers());
 				
-				DefaultMutableTreeNode root = (DefaultMutableTreeNode)tree.getModel().getRoot();
-				if (checkForUser(root, userId) == true)
+//				System.out.println("\n" + users);
+//				System.out.println("This User: " + thisUser); //testing
+				for (int i = 0; i < users.size(); ++i)
 				{
-					if (listModel.contains(userId))
+					if (users.get(i).toString().equals(thisUser.toString()))
 					{
-						System.out.println("Can't add this user again.");
+//						System.out.println("Current user in list: " + users.get(i).toString());
+						System.out.println("You can't follow yourself.");
+						continue;
 					}
-					else if (userId.equals(user.toString()))
+					else if (!(users.toString().contains(userID)))
 					{
-						System.out.println("You can't follow yourself. You'll be chasing your own tail.");
+//						System.out.println("Current user in list: " + users.get(i).toString());
+						System.out.println("Not a valid User ID");
+						continue;
 					}
-					else
-					{
-						listModel.addElement(userId);
-						lCurrentFollowing = new JList(listModel);
+					else if (users.get(i).toString().equals(userID))
+					{	
+						thisUser.addFollowing(users.get(i));
+						users.get(i).addFollowed(thisUser);
+						listModelFollow.addElement(userID);
+						lCurrentFollowing = new JList(listModelFollow);
+						break;
 					}
 				}
 			}
 		});
 		
-	}
-	
-	public boolean checkForUser(DefaultMutableTreeNode root, String id)
-	{
-		Enumeration e = root.preorderEnumeration();
-		while (e.hasMoreElements())
-		{
-			if (e.nextElement().toString().equals(id))
+		btnPostTweet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
 			{
-				return true;
+				String tweet = tfTweetMessage.getText();
+				
 			}
-		}
+		});
 		
-		return false;
 	}
-	
 }

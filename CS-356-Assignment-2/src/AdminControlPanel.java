@@ -30,7 +30,7 @@ public class AdminControlPanel extends JPanel {
 	private JTextField tfGroupID;
 	private JLabel lMessage;
 	
-	private User user;
+	private User selectedUser;
 	
 	private JButton btnMessageTotal;
 	private JButton btnPositivePercentage; 
@@ -135,9 +135,10 @@ public class AdminControlPanel extends JPanel {
 						{
 							users.add(new User(tfUserID.getText()));
 							System.out.println(users); //TESTING
-							addUser = new DefaultMutableTreeNode(tfUserID.getText());
+							addUser = new DefaultMutableTreeNode(users.get(users.size() - 1));
 							model.insertNodeInto(addUser, selectedNode, selectedNode.getChildCount());
 							tfUserID.setText("");
+							model.reload();
 						}
 						else if (selectedNode.getUserObject() instanceof User)
 						{
@@ -190,14 +191,15 @@ public class AdminControlPanel extends JPanel {
 		btnOpenUserView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+				selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+				
 				if (selectedNode != null)
 				{
 					if (selectedNode.getUserObject() instanceof User)
 					{
 						//TODO: create a user view frame that refers to the user object
-						user = (User) selectedNode.getUserObject();	
-						new UserViewFrame(user);
+						selectedUser = (User) selectedNode.getUserObject();	
+						new UserViewFrame(selectedUser);
 					}
 					else if (selectedNode.getUserObject() instanceof UserGroup)
 					{
@@ -218,8 +220,11 @@ public class AdminControlPanel extends JPanel {
 				lMessage.setText("Total of User Groups: " + UserGroup.getGroupCounter());
 			}
 		});
-
-		
+	}
+	
+	public ArrayList<User> getUsers()
+	{
+		return users;
 	}
 	
 	public static AdminControlPanel getInstance()
