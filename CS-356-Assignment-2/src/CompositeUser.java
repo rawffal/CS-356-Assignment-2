@@ -37,8 +37,7 @@ public class CompositeUser implements User, Observer
 	public CompositeUser(String id)
 	{
 		this.id = id;
-//		this.userPanel = new UserViewPanel(this);
-		setTextArea(text);
+		this.text = UserViewPanel.getNewsFeedText();
 		server = new Server();
 		usersFollowing = new ArrayList<CompositeUser>();
 		followedBy = new ArrayList<CompositeUser>();
@@ -185,11 +184,16 @@ public class CompositeUser implements User, Observer
 		
 		if (arg instanceof String)
 		{
-			System.out.println(newsFeed.add(message));
-//			this.text.append(message);
+			
+			//DEBUG
+			System.out.println("\nYOU ARE NOW WATCHING MAD TV.......MAD!!");
+			
+			
+//			System.out.println(newsFeed.add(message));
+			newsFeed.add(message);
 			this.text.setText(message);
-			userPanel.add(text);
-		}
-//		
+			System.out.println(text.getText());
+			
+		}		
 	}
 }

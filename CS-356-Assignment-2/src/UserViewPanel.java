@@ -30,17 +30,17 @@ public class UserViewPanel extends JPanel {
 	private static ArrayList<CompositeUser> users;
 	
 	private JTextArea taCurrentFollowing;
-	private JTextArea taNewsFeed;
+	private static JTextArea taNewsFeed;
 	
 	/**
 	 * Create the panel.
 	 */
-	public UserViewPanel(CompositeUser user) {
+	public UserViewPanel() {
 		
 		this.thisUser = AdminControlPanel.getSelectedUser();
 		users = new ArrayList<CompositeUser>(AdminControlPanel.getInstance().getUsers());
 		
-		System.out.println("User: " + user);
+		System.out.println("User: " +thisUser);
 		System.out.println("User in Tree: " + users);
 		System.out.println("Following: " + thisUser.getFollowing());
 		System.out.println("Who is following me: " + thisUser.getFollowed());
@@ -135,14 +135,21 @@ public class UserViewPanel extends JPanel {
 			public void actionPerformed(ActionEvent e)
 			{
 				String tweet = tfTweetMessage.getText();
-				thisUser.setTextArea(taNewsFeed);
+//				thisUser.setTextArea(taNewsFeed);
 //				thisUser.getUserPanel(this);
 				thisUser.addToNewsFeed(tweet);
 				taNewsFeed.append(thisUser.toString()+ ": " + tweet + "\n");
-				
-				
 			}
 		});	
+	}
+	
+	public static JTextArea getNewsFeedText()
+	{
+		if (taNewsFeed == null)
+		{
+			taNewsFeed = new JTextArea();
+		}
+		return taNewsFeed;
 	}
 	
 }
