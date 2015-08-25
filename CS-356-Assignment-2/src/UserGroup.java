@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class UserGroup {
+public class UserGroup implements Component{
 
 	/*
 	 * A user group has an unique ID, which can be used to group users. A user group can
@@ -46,6 +46,42 @@ public class UserGroup {
 	public String toString()
 	{
 		return id + " Group Folder";
+	}
+
+	@Override
+	public ArrayList<User> getFollowing() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList<User> getFollowed() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList<String> getNewsFeed() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addFollowing(User u) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addFollowed(User u) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addToNewsFeed(String s) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

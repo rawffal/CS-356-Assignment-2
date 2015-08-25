@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -214,20 +215,36 @@ public class AdminControlPanel extends JPanel {
 		
 		btnUserTotal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lMessage.setText("Total of users: " + User.getTotalUsers());
+//				lMessage.setText("Total of users: " + User.getTotalUsers());
+				UsersTotalVisitNode total = new UsersTotalVisitNode();
+				VisitorNodeTrait vnt = new VisitorNodeTrait();
+				vnt.acceptVisit(total);
 			}
 		});
 		
 		btnGroupTotal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lMessage.setText("Total of User Groups: " + UserGroup.getGroupCounter());
+				GroupsTotalVisitNode total = new GroupsTotalVisitNode();
+				VisitorNodeTrait vnt = new VisitorNodeTrait();
+				vnt.acceptVisit(total);
 			}
 		});
 		
 		btnMessageTotal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				lMessage.setText("Total Messages: " + User.getTotalMessages());
+				MessagesTotalVisitNode total = new MessagesTotalVisitNode();
+				VisitorNodeTrait vnt = new VisitorNodeTrait();
+				vnt.acceptVisit(total);
+			}
+		});
+		
+		btnPositivePercentage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				PositivePercentVisitNode total = new PositivePercentVisitNode();
+				VisitorNodeTrait vnt = new VisitorNodeTrait();
+				vnt.acceptVisit(total);
 			}
 		});
 	}
@@ -235,6 +252,11 @@ public class AdminControlPanel extends JPanel {
 	public ArrayList<User> getUsers()
 	{
 		return users;
+	}
+	
+	public ArrayList<UserGroup> getGroups()
+	{
+		return groups;
 	}
 	
 	public static AdminControlPanel getInstance()
@@ -250,4 +272,5 @@ public class AdminControlPanel extends JPanel {
 	{
 		return selectedUser;
 	}
+	
 }

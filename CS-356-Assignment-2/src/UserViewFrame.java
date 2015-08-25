@@ -11,7 +11,7 @@ public class UserViewFrame extends JFrame {
 		panel = new UserViewPanel(user);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
-		setTitle(user.toString());
+		setTitle(AdminControlPanel.getSelectedUser().toString());
 		setBounds(100, 100, 366, 521);
 		setContentPane(panel);
 		setResizable(false);

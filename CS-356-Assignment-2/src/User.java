@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.JTextArea;
+
 /*
  * 1) Unique ID
  * 2) a list of users that are following this id
@@ -9,20 +11,33 @@ import java.util.Observer;
  * 4) a news feed list that contains a list of Twitter messages
  */
 
-public class User extends Observable implements Observer 
-{
+/*
+ * output the percentage of the positive Tweet messages in all the users' news feed
+ * (the message containing positive words, such as good, great, excellent, etc.)
+ * Free free to decide the positive words.
+ */
 
+public class User implements Component, Observer 
+{
+	private Server server;
+	
 	private static int userCounter = 0;
 	private static int messagesTotal = 0;
+	private static int positiveCounter = 0;
 	
 	private String id = null;
 	private ArrayList<User> usersFollowing; //the list of users being followed by this user
 	private ArrayList<User> followedBy; //the list of users following this user
 	private ArrayList<String> newsFeed;
+
+	
+	
+	private JTextArea textArea;
 	
 	public User(String id)
 	{
 		this.id = id;
+		server = new Server();
 		usersFollowing = new ArrayList<User>();
 		followedBy = new ArrayList<User>();
 		newsFeed = new ArrayList<String>();
@@ -35,16 +50,16 @@ public class User extends Observable implements Observer
 	}
 	
 	/* ADDERS */
-	
+	//Post a tweet
 	public void addToNewsFeed(String message)
 	{
 		++messagesTotal;
+		
 		newsFeed.add(this.toString() + ": " +  message);
+		server.setTweet(this.toString() + ": " +  message);
 		
 		System.out.println(this.toString() + "'s News: " + newsFeed);
 		
-		setChanged();
-		notifyObservers(message);
 	}
 	
 	//Add ppl i want to follow
@@ -73,6 +88,10 @@ public class User extends Observable implements Observer
 		else
 		{
 			followedBy.add(user);
+			
+			//Server stuff
+			server.addObserver(user);
+			
 			System.out.println(user.toString() + " is now following " + this.toString());
 		}
 	}
@@ -127,6 +146,12 @@ public class User extends Observable implements Observer
 		return result;
 	}
 	
+	public static String getPostivePercentage()
+	{
+		String result = Double.toString((double)(positiveCounter)/(messagesTotal) * 100);
+		return result + "%";
+	}
+	
 	public String lastElement()
 	{
 		return newsFeed.get(newsFeed.size() - 1);
@@ -144,7 +169,11 @@ public class User extends Observable implements Observer
 	@Override
 	public void update(Observable o, Object arg) 
 	{
+		String message = arg.toString();
 		
+		if (arg instanceof String)
+		{
+			System.out.println(newsFeed.add(message));
+		}
 	}
-
 }
