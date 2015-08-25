@@ -26,11 +26,12 @@ public class AdminControlPanel extends JPanel {
 	
 	private ArrayList<User> users;
 	private ArrayList<UserGroup> groups;
+	
 	private JTextField tfUserID;
 	private JTextField tfGroupID;
 	private JLabel lMessage;
 	
-	private User selectedUser;
+	private static User selectedUser;
 	
 	private JButton btnMessageTotal;
 	private JButton btnPositivePercentage; 
@@ -47,6 +48,7 @@ public class AdminControlPanel extends JPanel {
 	private DefaultMutableTreeNode selectedNode;
 	private DefaultMutableTreeNode addUser;
 	private DefaultMutableTreeNode addGroup;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -55,6 +57,8 @@ public class AdminControlPanel extends JPanel {
 		/* TREE */
 		tree = TreeViewPanel.getInstance().getTree();
 		this.add(tree);
+		
+		
 		initialize();
 	}
 	
@@ -134,7 +138,6 @@ public class AdminControlPanel extends JPanel {
 						if (selectedNode.getUserObject() instanceof UserGroup)
 						{
 							users.add(new User(tfUserID.getText()));
-							System.out.println(users); //TESTING
 							addUser = new DefaultMutableTreeNode(users.get(users.size() - 1));
 							model.insertNodeInto(addUser, selectedNode, selectedNode.getChildCount());
 							tfUserID.setText("");
@@ -220,6 +223,13 @@ public class AdminControlPanel extends JPanel {
 				lMessage.setText("Total of User Groups: " + UserGroup.getGroupCounter());
 			}
 		});
+		
+		btnMessageTotal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				lMessage.setText("Total Messages: " + User.getTotalMessages());
+			}
+		});
 	}
 	
 	public ArrayList<User> getUsers()
@@ -234,5 +244,10 @@ public class AdminControlPanel extends JPanel {
 			instance = new AdminControlPanel();
 		}
 		return instance;
+	}
+	
+	public static User getSelectedUser()
+	{
+		return selectedUser;
 	}
 }
