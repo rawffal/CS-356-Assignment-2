@@ -20,14 +20,14 @@ public class UserViewPanel extends JPanel {
 	
 	private JTextField tfUserId;
 	private JTextField tfTweetMessage;
-	private User thisUser;
+	private CompositeUser thisUser;
 	
 	private JButton btnFollowUser;
 	private JButton btnPostTweet;
 	
 	private JLabel lblMessage;
 	
-	private static ArrayList<User> users;
+	private static ArrayList<CompositeUser> users;
 	
 	private JTextArea taCurrentFollowing;
 	private JTextArea taNewsFeed;
@@ -35,10 +35,10 @@ public class UserViewPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public UserViewPanel(User user) {
+	public UserViewPanel(CompositeUser user) {
 		
 		this.thisUser = AdminControlPanel.getSelectedUser();
-		users = new ArrayList<User>(AdminControlPanel.getInstance().getUsers());
+		users = new ArrayList<CompositeUser>(AdminControlPanel.getInstance().getUsers());
 		
 		System.out.println("User: " + user);
 		System.out.println("User in Tree: " + users);
@@ -99,7 +99,7 @@ public class UserViewPanel extends JPanel {
 		
 		taNewsFeed = new JTextArea();
 		taNewsFeed.setBounds(10, 269, 330, 118);
-		taNewsFeed.append(thisUser.getNewsFeedForEachElement());
+		taNewsFeed.setText(thisUser.getNewsFeedForEachElement());
 		add(taNewsFeed);
 		
 		/* ACTION LISTENER */
@@ -107,10 +107,6 @@ public class UserViewPanel extends JPanel {
 			public void actionPerformed(ActionEvent e)
 			{
 				String userID = tfUserId.getText();
-				
-				//Tree
-				
-				
 				for (int i = 0; i < users.size(); ++i)
 				{
 					if (users.get(i).toString().equals(thisUser.toString()))
@@ -139,19 +135,14 @@ public class UserViewPanel extends JPanel {
 			public void actionPerformed(ActionEvent e)
 			{
 				String tweet = tfTweetMessage.getText();
-				for (int i = 0; i < thisUser.getFollowing().size(); ++i)
-				{
-					if (thisUser.getFollowing().get(i).equals(tweet))
-					{
-						thisUser.addToNewsFeed(tweet);
-					}
-				}
-				
+				thisUser.setTextArea(taNewsFeed);
+//				thisUser.getUserPanel(this);
 				thisUser.addToNewsFeed(tweet);
-				
 				taNewsFeed.append(thisUser.toString()+ ": " + tweet + "\n");
+				
 				
 			}
 		});	
 	}
+	
 }

@@ -25,14 +25,14 @@ public class AdminControlPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private ArrayList<User> users;
+	private ArrayList<CompositeUser> users;
 	private ArrayList<UserGroup> groups;
 	
 	private JTextField tfUserID;
 	private JTextField tfGroupID;
 	private JLabel lMessage;
 	
-	private static User selectedUser;
+	private static CompositeUser selectedUser;
 	
 	private JButton btnMessageTotal;
 	private JButton btnPositivePercentage; 
@@ -66,7 +66,7 @@ public class AdminControlPanel extends JPanel {
 	/* Initialize Widgets */
 	private void initialize()
 	{
-		users = new ArrayList<User>();
+		users = new ArrayList<CompositeUser>();
 		groups = new ArrayList<UserGroup>();
 		
 		/* Label */
@@ -138,13 +138,13 @@ public class AdminControlPanel extends JPanel {
 					{
 						if (selectedNode.getUserObject() instanceof UserGroup)
 						{
-							users.add(new User(tfUserID.getText()));
+							users.add(new CompositeUser(tfUserID.getText()));
 							addUser = new DefaultMutableTreeNode(users.get(users.size() - 1));
 							model.insertNodeInto(addUser, selectedNode, selectedNode.getChildCount());
 							tfUserID.setText("");
 							model.reload();
 						}
-						else if (selectedNode.getUserObject() instanceof User)
+						else if (selectedNode.getUserObject() instanceof CompositeUser)
 						{
 							lMessage.setText("Can't add user within a user baby. Get on my level.");
 						}
@@ -167,7 +167,7 @@ public class AdminControlPanel extends JPanel {
 				{
 					if (tfGroupID.getText().trim().equals("") == false)
 					{
-						if (selectedNode.getUserObject() instanceof User)
+						if (selectedNode.getUserObject() instanceof CompositeUser)
 						{
 							lMessage.setText("Can't add group into a user. Scrub");
 						}
@@ -199,10 +199,10 @@ public class AdminControlPanel extends JPanel {
 				
 				if (selectedNode != null)
 				{
-					if (selectedNode.getUserObject() instanceof User)
+					if (selectedNode.getUserObject() instanceof CompositeUser)
 					{
 						//TODO: create a user view frame that refers to the user object
-						selectedUser = (User) selectedNode.getUserObject();	
+						selectedUser = (CompositeUser) selectedNode.getUserObject();	
 						new UserViewFrame(selectedUser);
 					}
 					else if (selectedNode.getUserObject() instanceof UserGroup)
@@ -215,41 +215,32 @@ public class AdminControlPanel extends JPanel {
 		
 		btnUserTotal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				lMessage.setText("Total of users: " + User.getTotalUsers());
-				UsersTotalVisitNode total = new UsersTotalVisitNode();
-				VisitorNodeTrait vnt = new VisitorNodeTrait();
-				vnt.acceptVisit(total);
+				lMessage.setText("Total of users: " + CompositeUser.getTotalUsers());
 			}
 		});
 		
 		btnGroupTotal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				GroupsTotalVisitNode total = new GroupsTotalVisitNode();
-				VisitorNodeTrait vnt = new VisitorNodeTrait();
-				vnt.acceptVisit(total);
+				lMessage.setText("Total of users: " + UserGroup.getGroupCounter());
 			}
 		});
 		
 		btnMessageTotal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				MessagesTotalVisitNode total = new MessagesTotalVisitNode();
-				VisitorNodeTrait vnt = new VisitorNodeTrait();
-				vnt.acceptVisit(total);
+				lMessage.setText("Total of users: " + CompositeUser.getTotalMessages());
 			}
 		});
 		
 		btnPositivePercentage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				PositivePercentVisitNode total = new PositivePercentVisitNode();
-				VisitorNodeTrait vnt = new VisitorNodeTrait();
-				vnt.acceptVisit(total);
+				lMessage.setText("Total of users: " + CompositeUser.getPostivePercentage());
 			}
 		});
 	}
 	
-	public ArrayList<User> getUsers()
+	public ArrayList<CompositeUser> getUsers()
 	{
 		return users;
 	}
@@ -268,9 +259,10 @@ public class AdminControlPanel extends JPanel {
 		return instance;
 	}
 	
-	public static User getSelectedUser()
+	public static CompositeUser getSelectedUser()
 	{
 		return selectedUser;
 	}
+	
 	
 }

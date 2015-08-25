@@ -6,7 +6,7 @@ public class UserViewFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private UserViewPanel panel;
 	
-	public UserViewFrame(User user)
+	public UserViewFrame(CompositeUser user)
 	{
 		panel = new UserViewPanel(user);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

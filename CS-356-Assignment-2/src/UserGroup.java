@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class UserGroup implements Component{
+public class UserGroup implements User {
 
 	/*
 	 * A user group has an unique ID, which can be used to group users. A user group can
@@ -10,19 +10,19 @@ public class UserGroup implements Component{
 	 */
 	
 	private String id = "";
-	private ArrayList<User> usersInGroup;
+	private ArrayList<CompositeUser> usersInGroup;
 	private ArrayList<UserGroup> groupsInGroup;
 	private static int groupCounter = 0;
 	
 	public UserGroup(String id)
 	{
 		this.id = id;
-		usersInGroup = new ArrayList<User>();
+		usersInGroup = new ArrayList<CompositeUser>();
 		groupsInGroup = new ArrayList<UserGroup>();
 		++groupCounter;
 	}
 	
-	public void add(User user)
+	public void add(CompositeUser user)
 	{
 		usersInGroup.add(user);
 	}
@@ -49,13 +49,13 @@ public class UserGroup implements Component{
 	}
 
 	@Override
-	public ArrayList<User> getFollowing() {
+	public ArrayList<CompositeUser> getFollowing() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ArrayList<User> getFollowed() {
+	public ArrayList<CompositeUser> getFollowed() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -67,13 +67,13 @@ public class UserGroup implements Component{
 	}
 
 	@Override
-	public void addFollowing(User u) {
+	public void addFollowing(CompositeUser u) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void addFollowed(User u) {
+	public void addFollowed(CompositeUser u) {
 		// TODO Auto-generated method stub
 		
 	}
