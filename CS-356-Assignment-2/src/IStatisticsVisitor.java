@@ -1,4 +1,5 @@
 
+
 public interface IStatisticsVisitor {
 
 	String visit(TotalUsers users);

@@ -5,6 +5,7 @@ import java.util.Enumeration;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -17,6 +18,9 @@ public class UserViewPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
+	private static UserViewPanel instance = null;
+	
+	private JFrame frame;
 	private JTextField tfUserId;
 	private JTextField tfTweetMessage;
 	private CompositeUser thisUser;
@@ -34,20 +38,29 @@ public class UserViewPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public UserViewPanel() {
+	public UserViewPanel(CompositeUser user) {
 		
 		this.thisUser = AdminControlPanel.getSelectedUser();
 		users = new ArrayList<CompositeUser>(AdminControlPanel.getInstance().getUsers());
+		
+		makeFrame();
+		initialize();
+		frame.setVisible(true);
 		
 		System.out.println("User: " +thisUser);
 		System.out.println("User in Tree: " + users);
 		System.out.println("Following: " + thisUser.getFollowing());
 		System.out.println("Who is following me: " + thisUser.getFollowed());
 		System.out.println("User's News feed: " + thisUser.getNewsFeed() + "\n");
+	}
+	
+	private void makeFrame() {
+		frame = new JFrame(thisUser.toString());
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
 		
-		
-		
-		initialize();
+		frame.setBounds(100, 100, 366, 521);
+		frame.setResizable(false);
 		
 	}
 	
@@ -59,47 +72,47 @@ public class UserViewPanel extends JPanel {
 		/* LABEL */
 		JLabel lblNewsFeed = new JLabel("News Feed");
 		lblNewsFeed.setBounds(10, 245, 160, 13);
-		add(lblNewsFeed);
+		frame.add(lblNewsFeed);
 		
 		JLabel lblCurrentFollowing = new JLabel("Current Following");
 		lblCurrentFollowing.setBounds(10, 52, 160, 13);
-		add(lblCurrentFollowing);
+		frame.add(lblCurrentFollowing);
 		
 		lblMessage = new JLabel("");
 		lblMessage.setForeground(Color.RED);
 		lblMessage.setBounds(10, 399, 330, 14);
-		add(lblMessage);
+		frame.add(lblMessage);
 		
 		/* TEXT FIELD */
 		tfUserId = new JTextField();
 		tfUserId.setBounds(10, 11, 160, 30);
 		tfUserId.setColumns(10);
-		add(tfUserId);
+		frame.add(tfUserId);
 		
 		tfTweetMessage = new JTextField();
 		tfTweetMessage.setColumns(10);
 		tfTweetMessage.setBounds(10, 204, 160, 30);
-		add(tfTweetMessage);
+		frame.add(tfTweetMessage);
 		
 		/* BUTTONS */
 		btnPostTweet = new JButton("Post Tweet");
 		btnPostTweet.setBounds(180, 204, 160, 30);
-		add(btnPostTweet);
+		frame.add(btnPostTweet);
 		
 		btnFollowUser = new JButton("Follow User");
 		btnFollowUser.setBounds(180, 11, 160, 30);
-		add(btnFollowUser);
+		frame.add(btnFollowUser);
 		
 		/* TEXT AREA */
 		taCurrentFollowing = new JTextArea();
 		taCurrentFollowing.setBounds(10, 75, 330, 118);
 		taCurrentFollowing.append(thisUser.getIDForFollowingUsers());
-		add(taCurrentFollowing);
+		frame.add(taCurrentFollowing);
 		
 		taNewsFeed = new JTextArea();
 		taNewsFeed.setBounds(10, 269, 330, 118);
 		taNewsFeed.setText(thisUser.getNewsFeedForEachElement());
-		add(taNewsFeed);
+		frame.add(taNewsFeed);
 		
 		/* ACTION LISTENER */
 		btnFollowUser.addActionListener(new ActionListener() {
@@ -119,7 +132,6 @@ public class UserViewPanel extends JPanel {
 					else if (users.get(i).toString().equals(userID))
 					{	
 						thisUser.addFollowing(users.get(i));
-						users.get(i).addFollowed(thisUser);
 
 						taCurrentFollowing.append(users.get(i).toString() + "\n");
 						
@@ -150,5 +162,7 @@ public class UserViewPanel extends JPanel {
 		}
 		return taNewsFeed;
 	}
+	
+	
 	
 }

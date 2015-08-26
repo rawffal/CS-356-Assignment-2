@@ -17,7 +17,7 @@ import javax.swing.JTextArea;
  * Free free to decide the positive words.
  */
 
-public class CompositeUser implements User, Observer
+public class CompositeUser extends Observable implements User, Observer
 {
 	private Server server;
 	
@@ -84,25 +84,19 @@ public class CompositeUser implements User, Observer
 			}
 		}
 		usersFollowing.add(user);
+		user.addFollowed(this);
 		
-		System.out.println(" You are now following: " + user.toString());
+		//testing
+		System.out.println("User: " +this);
+		System.out.println("Following: " + getFollowing());
+		System.out.println("Who is following me: " + getFollowed());
+		System.out.println("User's News feed: " + getNewsFeed() + "\n");
+		
 	}
 	
-	public void addFollowed(CompositeUser user)
-	{
-		if (followedBy.contains(user))
-		{
-			System.out.println("You are already following this person");
-		}
-		else
-		{
-			followedBy.add(user);
-			
-			//Server stuff
-			server.addObserver(user);
-			
-			System.out.println(user.toString() + " is now following " + this.toString());
-		}
+	public void addFollowed(CompositeUser user) {
+		this.followedBy.add(user);
+		server.addObserver(user);
 	}
 	
 	/* GETTERS */

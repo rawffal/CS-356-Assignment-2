@@ -203,7 +203,8 @@ public class AdminControlPanel extends JPanel {
 					{
 						//TODO: create a user view frame that refers to the user object
 						selectedUser = (CompositeUser) selectedNode.getUserObject();	
-						new UserViewFrame(selectedUser);
+						
+						new UserViewPanel(selectedUser); //Am i supposed to save this into a variable
 					}
 					else if (selectedNode.getUserObject() instanceof UserGroup)
 					{

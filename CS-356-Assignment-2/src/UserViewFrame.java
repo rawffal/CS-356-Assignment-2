@@ -7,7 +7,6 @@ public class UserViewFrame extends JFrame {
 	
 	public UserViewFrame(CompositeUser user)
 	{
-		panel = new UserViewPanel();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
 		setTitle(AdminControlPanel.getSelectedUser().toString());
