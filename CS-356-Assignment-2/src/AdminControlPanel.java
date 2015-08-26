@@ -217,7 +217,7 @@ public class AdminControlPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				TotalUsers total = new TotalUsers();
 				TotalDoVisitor tdv = new TotalDoVisitor();
-				lMessage.setText("Total of users: " + tdv.visit(total));
+				lMessage.setText(tdv.visit(total));
 			}
 		});
 		
@@ -225,21 +225,25 @@ public class AdminControlPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				TotalGroups total = new TotalGroups();
 				TotalDoVisitor tdv = new TotalDoVisitor();
-				lMessage.setText("Total of users: " + tdv.visit(total));
+				lMessage.setText(tdv.visit(total));
 			}
 		});
 		
 		btnMessageTotal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				lMessage.setText("Total of users: " + CompositeUser.getTotalMessages());
+				TotalMessages total = new TotalMessages();
+				TotalDoVisitor tdv = new TotalDoVisitor();
+				lMessage.setText(tdv.visit(total));
 			}
 		});
 		
 		btnPositivePercentage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				lMessage.setText("Total of users: " + CompositeUser.getPostivePercentage());
+				TotalPositive total = new TotalPositive();
+				TotalDoVisitor tdv = new TotalDoVisitor();
+				lMessage.setText(tdv.visit(total));
 			}
 		});
 	}

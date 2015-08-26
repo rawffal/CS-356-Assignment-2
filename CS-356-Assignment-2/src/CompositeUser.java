@@ -29,6 +29,9 @@ public class CompositeUser implements User, Observer
 	private ArrayList<CompositeUser> usersFollowing; //the list of users being followed by this user
 	private ArrayList<CompositeUser> followedBy; //the list of users following this user
 	private ArrayList<String> newsFeed;
+	private final String[] positiveWords = new String[] {"Good", "Great", "Outstanding", "Perfect", 
+			"Good Job", "Excellent", "Awesome", "Beautiful",
+				"Amazing", "Cool"};
 	
 	private JTextArea text;
 	
@@ -55,6 +58,11 @@ public class CompositeUser implements User, Observer
 	public void addToNewsFeed(String message)
 	{
 		++messagesTotal;
+		for (int i = 0; i < positiveWords.length; ++i) {
+			if (positiveWords[i].equalsIgnoreCase(message)) {
+				++positiveCounter;
+			}
+		}
 		
 		newsFeed.add(this.toString() + ": " +  message);
 		server.setTweet(this.toString() + ": " +  message);
