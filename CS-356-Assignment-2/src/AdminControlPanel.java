@@ -215,13 +215,17 @@ public class AdminControlPanel extends JPanel {
 		
 		btnUserTotal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lMessage.setText("Total of users: " + CompositeUser.getTotalUsers());
+				TotalUsers total = new TotalUsers();
+				TotalDoVisitor tdv = new TotalDoVisitor();
+				lMessage.setText("Total of users: " + tdv.visit(total));
 			}
 		});
 		
 		btnGroupTotal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lMessage.setText("Total of users: " + UserGroup.getGroupCounter());
+				TotalGroups total = new TotalGroups();
+				TotalDoVisitor tdv = new TotalDoVisitor();
+				lMessage.setText("Total of users: " + tdv.visit(total));
 			}
 		});
 		

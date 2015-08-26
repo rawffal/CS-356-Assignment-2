@@ -1,6 +1,6 @@
-import java.util.ArrayList;
 import java.util.Observable;
-import java.util.Observer;
+
+import javax.swing.JTextArea;
 
 /*
  * Subject
@@ -35,6 +35,7 @@ public class Server extends Observable {
 		setChanged();
 		notifyObservers(message);
 		
-		
 	}
+	
+	
 }
