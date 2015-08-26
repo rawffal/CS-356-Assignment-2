@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -34,6 +35,8 @@ public class AdminControlPanel extends JPanel {
 	
 	private static CompositeUser selectedUser;
 	
+	private JFrame frame;
+	
 	private JButton btnMessageTotal;
 	private JButton btnPositivePercentage; 
 	private JButton btnAddUser;
@@ -54,13 +57,19 @@ public class AdminControlPanel extends JPanel {
 	 * Create the panel.
 	 */
 	private AdminControlPanel() {
-		setLayout(null);
-		/* TREE */
-		tree = TreeViewPanel.getInstance().getTree();
-		this.add(tree);
-		
-		
+		makeFrame();
 		initialize();
+		frame.setVisible(true);
+	}
+	
+	private void makeFrame() {
+		frame = new JFrame("Mini Twitter");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(100, 100, 752, 464);
+		frame.getContentPane().setLayout(null);
+		
+		//Fixed size
+		frame.setResizable(false);
 	}
 	
 	/* Initialize Widgets */
@@ -69,60 +78,68 @@ public class AdminControlPanel extends JPanel {
 		users = new ArrayList<CompositeUser>();
 		groups = new ArrayList<UserGroup>();
 		
+		/* Tree */
+		UserGroup rootGroup = new UserGroup("Root");
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootGroup);
+		model = new DefaultTreeModel(root);
+		tree = new JTree(model);
+		tree.setBounds(10, 11, 381, 413);
+		frame.add(tree);
+		
 		/* Label */
 		lMessage = new JLabel("");
 		lMessage.setForeground(Color.RED);
 		lMessage.setBounds(425, 218, 316, 14);
-		add(lMessage);
+		frame.add(lMessage);
 		
 		/* Text Fields */
 		tfUserID = new JTextField("");
 		tfUserID.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 		tfUserID.setBounds(425, 11, 151, 40);
-		add(tfUserID);
 		tfUserID.setColumns(10);
+		frame.add(tfUserID);
 		
 		tfGroupID = new JTextField("");
 		tfGroupID.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 		tfGroupID.setColumns(10);
 		tfGroupID.setBounds(425, 62, 151, 40);
-		add(tfGroupID);
+		frame.add(tfGroupID);
 		
 		/* Buttons */
 		btnMessageTotal = new JButton("Show Messages Total");
 		btnMessageTotal.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 		btnMessageTotal.setBounds(425, 384, 151, 40);
-		add(btnMessageTotal);
+		frame.add(btnMessageTotal);
 		
 		btnPositivePercentage = new JButton("Show Positive Percentage");
 		btnPositivePercentage.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		btnPositivePercentage.setBounds(590, 383, 151, 40);
-		add(btnPositivePercentage);
+		frame.add(btnPositivePercentage);
 		
 		btnAddUser = new JButton("Add User");
 		btnAddUser.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		btnAddUser.setBounds(590, 11, 151, 40);
-		add(btnAddUser);
+		frame.add(btnAddUser);
 		
 		btnAddGroup = new JButton("Add Group");
 		btnAddGroup.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		btnAddGroup.setBounds(590, 62, 151, 40);
-		add(btnAddGroup);
+		frame.add(btnAddGroup);
 		
 		btnOpenUserView = new JButton("Open User View");
 		btnOpenUserView.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		btnOpenUserView.setBounds(425, 113, 316, 40);
-		add(btnOpenUserView);
+		frame.add(btnOpenUserView);
 		
 		btnUserTotal = new JButton("Show User Total");
 		btnUserTotal.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		btnUserTotal.setBounds(425, 332, 151, 40);
-		add(btnUserTotal);
+		frame.add(btnUserTotal);
 		
 		btnGroupTotal = new JButton("Show Group Total");
 		btnGroupTotal.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		btnGroupTotal.setBounds(590, 332, 151, 40);
-		add(btnGroupTotal);
+		frame.add(btnGroupTotal);
 		
 		/* Action Listeners for all the Buttons */
 		btnAddUser.addActionListener(new ActionListener() {
