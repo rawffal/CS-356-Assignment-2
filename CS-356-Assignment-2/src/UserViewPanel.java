@@ -30,7 +30,7 @@ public class UserViewPanel extends JPanel {
 	
 	private JLabel lblMessage;
 	
-	private static ArrayList<CompositeUser> users;
+	private static ArrayList<CompositeUser> users = new ArrayList<CompositeUser>(AdminControlPanel.getInstance().getUsers());
 	
 	private JTextArea taCurrentFollowing;
 	private static JTextArea taNewsFeed;
@@ -146,12 +146,22 @@ public class UserViewPanel extends JPanel {
 			public void actionPerformed(ActionEvent e)
 			{
 				String tweet = tfTweetMessage.getText();
-//				thisUser.setTextArea(taNewsFeed);
-//				thisUser.getUserPanel(this);
+				
 				thisUser.addToNewsFeed(tweet);
 				taNewsFeed.append(thisUser.toString()+ ": " + tweet + "\n");
 			}
 		});	
+	}
+	
+	public static UserViewPanel getInstance(CompositeUser user) {
+		//DEBUG
+		System.out.println("Users in the tree: " + users);
+		
+		if (!(AdminControlPanel.getInstance().getUsers().contains(user))) {
+			return null;
+		}
+		
+		return instance = new UserViewPanel(user);
 	}
 	
 	public static JTextArea getNewsFeedText()

@@ -1,3 +1,4 @@
+import java.awt.List;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -17,15 +18,15 @@ import javax.swing.JTextArea;
  * Free free to decide the positive words.
  */
 
-public class CompositeUser extends Observable implements User, Observer
-{
-	private Server server;
-	
+public class CompositeUser extends Observable implements User, Observer {	
 	private static int userCounter = 0;
 	private static int messagesTotal = 0;
 	private static int positiveCounter = 0;
 	
 	private String id = null;
+	
+	private ArrayList<CompositeUser> totalUsers;
+	
 	private ArrayList<CompositeUser> usersFollowing; //the list of users being followed by this user
 	private ArrayList<CompositeUser> followedBy; //the list of users following this user
 	private ArrayList<String> newsFeed;
@@ -40,8 +41,7 @@ public class CompositeUser extends Observable implements User, Observer
 	public CompositeUser(String id)
 	{
 		this.id = id;
-		this.text = UserViewPanel.getNewsFeedText();
-		server = new Server();
+		
 		usersFollowing = new ArrayList<CompositeUser>();
 		followedBy = new ArrayList<CompositeUser>();
 		newsFeed = new ArrayList<String>();
@@ -65,7 +65,6 @@ public class CompositeUser extends Observable implements User, Observer
 		}
 		
 		newsFeed.add(this.toString() + ": " +  message);
-		server.setTweet(this.toString() + ": " +  message);
 		
 		System.out.println(this.toString() + "'s News: " + newsFeed);
 		
@@ -96,7 +95,9 @@ public class CompositeUser extends Observable implements User, Observer
 	
 	public void addFollowed(CompositeUser user) {
 		this.followedBy.add(user);
-		server.addObserver(user);
+		
+		//TODO: Do something with the observable
+//		server.addObserver(user);
 	}
 	
 	/* GETTERS */
@@ -174,10 +175,13 @@ public class CompositeUser extends Observable implements User, Observer
 		this.text = textArea;
 	}
 	
-	public void setUserPanel(UserViewPanel userPanel)
+	public UserViewPanel getUserPanel()
 	{
-		this.userPanel = userPanel;
+		return this.userPanel;
 	}
+	
+	/* OBSERVABLE METHODS */
+	
 	
 	@Override
 	public void update(Observable o, Object arg) 

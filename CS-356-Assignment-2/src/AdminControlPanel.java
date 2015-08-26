@@ -53,6 +53,9 @@ public class AdminControlPanel extends JPanel {
 	private DefaultMutableTreeNode addUser;
 	private DefaultMutableTreeNode addGroup;
 	
+	private UserViewPanel panel;
+	
+//	private UserViewPanel panel;
 	/**
 	 * Create the panel.
 	 */
@@ -221,7 +224,9 @@ public class AdminControlPanel extends JPanel {
 						//TODO: create a user view frame that refers to the user object
 						selectedUser = (CompositeUser) selectedNode.getUserObject();	
 						
-						new UserViewPanel(selectedUser); //Am i supposed to save this into a variable
+//						new UserViewPanel(selectedUser); //Am i supposed to save this into a variable
+						
+						UserViewPanel.getInstance(selectedUser);
 					}
 					else if (selectedNode.getUserObject() instanceof UserGroup)
 					{
