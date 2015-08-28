@@ -1,5 +1,6 @@
 
 
+
 public class TotalMessages implements IStatisticsElement{
 	
 

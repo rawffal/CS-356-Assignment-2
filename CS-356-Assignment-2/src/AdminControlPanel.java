@@ -3,12 +3,12 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -26,14 +26,12 @@ public class AdminControlPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private ArrayList<CompositeUser> users;
-	private ArrayList<UserGroup> groups;
+	private List<User> users;
+	private List<User> groups;
 	
 	private JTextField tfUserID;
 	private JTextField tfGroupID;
 	private JLabel lMessage;
-	
-	private static CompositeUser selectedUser;
 	
 	private JFrame frame;
 	
@@ -52,34 +50,27 @@ public class AdminControlPanel extends JPanel {
 	private DefaultMutableTreeNode selectedNode;
 	private DefaultMutableTreeNode addUser;
 	private DefaultMutableTreeNode addGroup;
-	
-	private UserViewPanel panel;
-	
-//	private UserViewPanel panel;
+
 	/**
 	 * Create the panel.
 	 */
 	private AdminControlPanel() {
-		makeFrame();
 		initialize();
 		frame.setVisible(true);
-	}
-	
-	private void makeFrame() {
-		frame = new JFrame("Mini Twitter");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setBounds(100, 100, 752, 464);
-		frame.getContentPane().setLayout(null);
-		
-		//Fixed size
-		frame.setResizable(false);
 	}
 	
 	/* Initialize Widgets */
 	private void initialize()
 	{
-		users = new ArrayList<CompositeUser>();
-		groups = new ArrayList<UserGroup>();
+		/* Making the frame */
+		frame = new JFrame("Mini Twitter");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(100, 100, 752, 464);
+		frame.getContentPane().setLayout(null);
+		frame.setResizable(false);
+		
+		users = new ArrayList<User>();
+		groups = new ArrayList<User>();
 		
 		/* Tree */
 		UserGroup rootGroup = new UserGroup("Root");
@@ -122,12 +113,12 @@ public class AdminControlPanel extends JPanel {
 		btnAddUser = new JButton("Add User");
 		btnAddUser.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		btnAddUser.setBounds(590, 11, 151, 40);
-		frame.add(btnAddUser);
+		
 		
 		btnAddGroup = new JButton("Add Group");
 		btnAddGroup.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		btnAddGroup.setBounds(590, 62, 151, 40);
-		frame.add(btnAddGroup);
+		
 		
 		btnOpenUserView = new JButton("Open User View");
 		btnOpenUserView.setFont(new Font("Times New Roman", Font.PLAIN, 18));
@@ -137,7 +128,7 @@ public class AdminControlPanel extends JPanel {
 		btnUserTotal = new JButton("Show User Total");
 		btnUserTotal.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		btnUserTotal.setBounds(425, 332, 151, 40);
-		frame.add(btnUserTotal);
+		
 		
 		btnGroupTotal = new JButton("Show Group Total");
 		btnGroupTotal.setFont(new Font("Times New Roman", Font.PLAIN, 15));
@@ -160,7 +151,7 @@ public class AdminControlPanel extends JPanel {
 						{
 							users.add(new CompositeUser(tfUserID.getText()));
 							addUser = new DefaultMutableTreeNode(users.get(users.size() - 1));
-							model.insertNodeInto(addUser, selectedNode, selectedNode.getChildCount());
+							model.insertNodeInto(addUser, selectedNode, selectedNode.getChildCount());					
 							tfUserID.setText("");
 							model.reload();
 						}
@@ -177,6 +168,7 @@ public class AdminControlPanel extends JPanel {
 				
 			}
 		});
+		frame.add(btnAddUser);
 		
 		btnAddGroup.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -211,31 +203,35 @@ public class AdminControlPanel extends JPanel {
 				}
 			}
 		});
+		frame.add(btnAddGroup);
 		
 		btnOpenUserView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 				
-				if (selectedNode != null)
+				if (selectedNode == null) {
+					
+					lMessage.setText("Select a user");
+					
+				}
+				else if (selectedNode.getUserObject() instanceof CompositeUser)
 				{
-					if (selectedNode.getUserObject() instanceof CompositeUser)
-					{
-						//TODO: create a user view frame that refers to the user object
-						selectedUser = (CompositeUser) selectedNode.getUserObject();	
+					User selectedUser = (CompositeUser) selectedNode.getUserObject();	
+					
+					UserViewPanel.getInstance(selectedUser);
+				}
+				else if (selectedNode.getUserObject() instanceof UserGroup)
+				{
+					lMessage.setText("Select an User ID. Not a group");
+				}
 						
-//						new UserViewPanel(selectedUser); //Am i supposed to save this into a variable
-						
-						UserViewPanel.getInstance(selectedUser);
-					}
-					else if (selectedNode.getUserObject() instanceof UserGroup)
-					{
-						lMessage.setText("Select an User ID. Not a group");
-					}
-				}		
 			}
 		});
+		frame.add(btnUserTotal);
 		
+		
+		/* Using the Visitor Pattern for statistics */
 		btnUserTotal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TotalUsers total = new TotalUsers();
@@ -271,13 +267,12 @@ public class AdminControlPanel extends JPanel {
 		});
 	}
 	
-	public ArrayList<CompositeUser> getUsers()
+	public List<User> getUsers()
 	{
 		return users;
 	}
 	
-	public ArrayList<UserGroup> getGroups()
-	{
+	public List<User> getGroups() {
 		return groups;
 	}
 	
@@ -288,11 +283,6 @@ public class AdminControlPanel extends JPanel {
 			instance = new AdminControlPanel();
 		}
 		return instance;
-	}
-	
-	public static CompositeUser getSelectedUser()
-	{
-		return selectedUser;
 	}
 	
 	

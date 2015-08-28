@@ -1,5 +1,6 @@
 
 
+
 public class TotalUsers implements IStatisticsElement{
 	
 

@@ -1,20 +1,25 @@
-import java.util.ArrayList;
+import java.util.List;
 
 /* Composite Pattern */
 public interface User {
 	
 	public String toString();
 	
-	public ArrayList<CompositeUser> getFollowing();
+	public List<User> getFollowing();
 	
-	public ArrayList<CompositeUser> getFollowed();
+	public List<User> getFollower();
 	
-	public ArrayList<String> getNewsFeed();
+	public List<String> getNewsFeed();
 	
-	public void addFollowing(CompositeUser u);
+	public void addFollowing(User u);
 	
-	public void addFollowed(CompositeUser u);
+	public void addFollowed(User u);
 	
 	public void addToNewsFeed(String s);
+
+	public UserViewPanel getUserPanel();
+
+	public void setUserPanel(UserViewPanel userViewPanel);
+
 
 }

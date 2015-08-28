@@ -1,5 +1,6 @@
 
 
+
 public class TotalGroups implements IStatisticsElement{
 	
 

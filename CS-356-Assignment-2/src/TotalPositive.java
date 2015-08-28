@@ -1,5 +1,6 @@
 
 
+
 public class TotalPositive implements IStatisticsElement{
 	
 

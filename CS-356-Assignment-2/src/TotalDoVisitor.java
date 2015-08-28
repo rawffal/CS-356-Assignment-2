@@ -1,5 +1,6 @@
 
 
+
 public class TotalDoVisitor implements IStatisticsVisitor {
 
 	@Override
