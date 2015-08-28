@@ -139,89 +139,14 @@ public class AdminControlPanel extends JPanel {
 		btnAddUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				lMessage.setText("");
-				model = (DefaultTreeModel) tree.getModel();
-				selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-				
-				if (selectedNode != null)
-				{
-					if (!tfUserID.getText().trim().equals(""))
-					{
-						if (selectedNode.getUserObject() instanceof UserGroup)
-						{
-							System.out.println(groups);
-							for (int i = 0; i < users.size(); ++i) {
-								if (users.get(i).getId().equalsIgnoreCase(tfUserID.getText())) {
-									lMessage.setText("Please enter a unique id");
-									return;
-								} 
-							}
-							
-							for (int i = 0; i < groups.size(); ++i ) {
-								if (groups.get(i).getId().equalsIgnoreCase(tfUserID.getText())) {
-									lMessage.setText("Please enter a unique id");
-									return;
-								}
-							}
-							
-							users.add(new CompositeUser(tfUserID.getText()));
-							addUser = new DefaultMutableTreeNode(users.get(users.size() - 1));
-							model.insertNodeInto(addUser, selectedNode, selectedNode.getChildCount());					
-							tfUserID.setText("");
-							model.reload();
-						}
-						else if (selectedNode.getUserObject() instanceof CompositeUser)
-						{
-							lMessage.setText("Can't add user within a user baby. Get on my level.");
-						}
-					}
-				}
-				else
-				{
-					lMessage.setText("Please enter a valid User ID");
-				}
-				
+				addUsers();
 			}
 		});
 		frame.add(btnAddUser);
 		
 		btnAddGroup.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lMessage.setText("");
-				model = (DefaultTreeModel) tree.getModel();
-				selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-				if (selectedNode != null)
-				{
-					if (tfGroupID.getText().trim().equals("") == false)
-					{
-						if (selectedNode.getUserObject() instanceof CompositeUser)
-						{
-							lMessage.setText("Can't add group into a user. Scrub");
-						}
-						else if (selectedNode.getUserObject() instanceof UserGroup)
-						{
-							for (int i = 0; i < users.size(); ++i) {
-								if (users.get(i).toString().equalsIgnoreCase(tfGroupID.getText())) {
-									lMessage.setText("Please enter a unique id");
-									return;
-								}
-							}
-							groups.add(new UserGroup(tfGroupID.getText()));
-							System.out.println("\n" + groups.get(groups.size() - 1)); //TESTING
-							addGroup = new DefaultMutableTreeNode(groups.get(groups.size() - 1));
-							model.insertNodeInto(addGroup, selectedNode, selectedNode.getChildCount());
-							tfGroupID.setText("");
-						}
-					}
-					else
-					{
-						lMessage.setText("You must enter a Group ID");
-					}
-				}
-				else
-				{
-					lMessage.setText("You must choose a parent node to insert");
-				}
+				addGroups();
 			}
 		});
 		frame.add(btnAddGroup);
@@ -236,19 +161,16 @@ public class AdminControlPanel extends JPanel {
 					lMessage.setText("Select a user");
 					
 				}
-				else if (selectedNode.getUserObject() instanceof CompositeUser)
+				else if (selectedNode.getUserObject() instanceof SingleUser)
 				{
-					User selectedUser = (CompositeUser) selectedNode.getUserObject();	
+					User selectedUser = (SingleUser) selectedNode.getUserObject();	
 					
 					UserViewPanel.getInstance(selectedUser);
 				}
 				else if (selectedNode.getUserObject() instanceof UserGroup)
 				{
-					
-					lMessage.setText("Select an User ID. Not a group");
-					
+					lMessage.setText("Select an User ID. Not a group");		
 				}
-						
 			}
 		});
 		frame.add(btnUserTotal);
@@ -288,6 +210,95 @@ public class AdminControlPanel extends JPanel {
 				lMessage.setText(tdv.visit(total));
 			}
 		});
+	}
+	
+	public void addUsers() {
+		lMessage.setText("");
+		model = (DefaultTreeModel) tree.getModel();
+		selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+		
+		if (selectedNode != null)
+		{
+			if (!tfUserID.getText().trim().equals(""))
+			{
+				if (selectedNode.getUserObject() instanceof UserGroup)
+				{
+					System.out.println(groups);
+					for (int i = 0; i < users.size(); ++i) {
+						if (users.get(i).getId().equalsIgnoreCase(tfUserID.getText())) {
+							lMessage.setText("Please enter a unique id");
+							return;
+						} 
+					}
+					
+					for (int i = 0; i < groups.size(); ++i ) {
+						if (groups.get(i).getId().equalsIgnoreCase(tfUserID.getText())) {
+							lMessage.setText("Please enter a unique id");
+							return;
+						}
+					}
+					
+					users.add(new SingleUser(tfUserID.getText()));
+					addUser = new DefaultMutableTreeNode(users.get(users.size() - 1));
+					model.insertNodeInto(addUser, selectedNode, selectedNode.getChildCount());					
+					tfUserID.setText("");
+					model.reload();
+				}
+				else if (selectedNode.getUserObject() instanceof SingleUser)
+				{
+					lMessage.setText("Can't add user within a user baby. Get on my level.");
+				}
+			}
+		}
+		else
+		{
+			lMessage.setText("Please enter a valid User ID");
+		}
+	}
+	
+	public void addGroups() {
+		lMessage.setText("");
+		model = (DefaultTreeModel) tree.getModel();
+		selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+		if (selectedNode != null)
+		{
+			if (tfGroupID.getText().trim().equals("") == false)
+			{
+				if (selectedNode.getUserObject() instanceof SingleUser)
+				{
+					lMessage.setText("Can't add group into a user. Scrub");
+				}
+				else if (selectedNode.getUserObject() instanceof UserGroup)
+				{
+					for (int i = 0; i < users.size(); ++i) {
+						if (users.get(i).toString().equalsIgnoreCase(tfGroupID.getText())) {
+							lMessage.setText("Please enter a unique id");
+							return;
+						}
+					}
+					
+					for (int i = 0; i < groups.size(); ++i) {
+						if (groups.get(i).getId().equalsIgnoreCase(tfGroupID.getText())) {
+							lMessage.setText("Please enter a unique id");
+							return;
+						}
+					}
+					groups.add(new UserGroup(tfGroupID.getText()));
+					System.out.println("\n" + groups.get(groups.size() - 1)); //TESTING
+					addGroup = new DefaultMutableTreeNode(groups.get(groups.size() - 1));
+					model.insertNodeInto(addGroup, selectedNode, selectedNode.getChildCount());
+					tfGroupID.setText("");
+				}
+			}
+			else
+			{
+				lMessage.setText("You must enter a Group ID");
+			}
+		}
+		else
+		{
+			lMessage.setText("You must choose a parent node to insert");
+		}
 	}
 	
 	public List<User> getUsers()

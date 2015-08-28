@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Free free to decide the positive words.
  */
 
-public class CompositeUser implements User {
+public class SingleUser implements User {
 	private static int userCounter = 0;
 
 	private String id = null;
@@ -26,7 +26,7 @@ public class CompositeUser implements User {
 
 	private UserViewPanel userPanel;
 
-	public CompositeUser(String id) {
+	public SingleUser(String id) {
 		this.id = id;
 		usersFollowing = new ArrayList<User>();
 		followedBy = new ArrayList<User>();
