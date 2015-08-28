@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JScrollPane;
 
 
 public class UserViewPanel implements Observable, Observer {
@@ -33,23 +34,25 @@ public class UserViewPanel implements Observable, Observer {
 	private JLabel lblNewsFeed;
 	private JLabel lblCurrentFollowing;
 	
+	private final String[] positiveWords = new String[] { "Good", "Great",
+			"Outstanding", "Perfect", "Good Job", "Excellent", "Awesome",
+			"Beautiful", "Amazing", "Cool", "Nice" };
+	
+	private static int totalMessagesCounter = 0;
+	private static int totalPositivePercentage = 0;
+	
 	/**
 	 * Create the panel.
 	 */
 	private UserViewPanel(User user) {
 		
 		this.thisUser = user;
+		System.out.println(thisUser.getNewsFeed());
 		makeFrame();
 		initialize();
 		frame.setVisible(true);
 		
-		
 	}
-	
-	/* TODO: CHANGE */
-	
-	
-
 	
 	private void makeFrame() {
 		frame = new JFrame(thisUser.toString());
@@ -66,27 +69,27 @@ public class UserViewPanel implements Observable, Observer {
 		/* LABEL */
 		lblNewsFeed = new JLabel("News Feed");
 		lblNewsFeed.setBounds(10, 245, 160, 13);
-		frame.add(lblNewsFeed);
+		frame.getContentPane().add(lblNewsFeed);
 		
 		lblCurrentFollowing = new JLabel("Current Following");
 		lblCurrentFollowing.setBounds(10, 52, 160, 13);
-		frame.add(lblCurrentFollowing);
+		frame.getContentPane().add(lblCurrentFollowing);
 		
 		lMessage = new JLabel("");
 		lMessage.setForeground(Color.RED);
 		lMessage.setBounds(10, 399, 330, 14);
-		frame.add(lMessage);
+		frame.getContentPane().add(lMessage);
 		
 		/* TEXT FIELD */
 		tfUserId = new JTextField();
 		tfUserId.setBounds(10, 11, 160, 30);
 		tfUserId.setColumns(10);
-		frame.add(tfUserId);
+		frame.getContentPane().add(tfUserId);
 		
 		tfTweetMessage = new JTextField();
 		tfTweetMessage.setColumns(10);
 		tfTweetMessage.setBounds(10, 204, 160, 30);
-		frame.add(tfTweetMessage);
+		frame.getContentPane().add(tfTweetMessage);
 		
 		/* BUTTONS */
 		btnPostTweet = new JButton("Post Tweet");
@@ -99,11 +102,11 @@ public class UserViewPanel implements Observable, Observer {
 		/* TEXT AREA */
 		taCurrentFollowing = new JTextArea();
 		taCurrentFollowing.setBounds(10, 75, 330, 118);
-		frame.add(taCurrentFollowing);
+		frame.getContentPane().add(taCurrentFollowing);
 		
 		taNewsFeed = new JTextArea();
 		taNewsFeed.setBounds(10, 269, 330, 118);
-		frame.add(taNewsFeed);
+		frame.getContentPane().add(taNewsFeed);
 		
 		/* ACTION LISTENER */
 		btnFollowUser.addActionListener(new ActionListener() {
@@ -114,38 +117,35 @@ public class UserViewPanel implements Observable, Observer {
 			}
 
 		});
-		frame.add(btnFollowUser);
+		frame.getContentPane().add(btnFollowUser);
 		
 		btnPostTweet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
 				String tweet = tfTweetMessage.getText();
+				
+				
+				
 				if (tweet.equals("")) {
 					lMessage.setText("Please enter a message");
 				} else if (!tweet.equals("")) { 
-					thisUser.addToNewsFeed(tweet);
-					//update this panel
+					thisUser.addToNewsFeed(thisUser.toString() + ": " + tweet);
 					update(thisUser);
 					tfTweetMessage.setText("");
 					updateFollowers(tweet);
 				}
+				++totalMessagesCounter;
+				for (int i = 0; i < positiveWords.length; ++i) {
+					if (positiveWords[i].equals(tweet)) {
+						++totalPositivePercentage;
+					}
+				}
+				
 			}
 		});	
-		frame.add(btnPostTweet);
+		frame.getContentPane().add(btnPostTweet);
 		
-//		//UserViewPanel is the Observable
-//				@Override
-//				public void update(JTextArea text) {
-//					// TODO Auto-generated method stub
-//					String message = "";
-//					String user = thisUser.toString();
-//					List<String> newsFeed = thisUser.getNewsFeed();
-//					for (int i = 0; i < newsFeed.size(); ++i) {
-//						message += newsFeed.get(i) + "\n";
-//					}
-//					taNewsFeed.setText(user + ": " + message);
-//					
-//				}
+		
 		
 		frame.addWindowListener(new WindowListener() {
 			public void windowClosing(WindowEvent e) {
@@ -190,12 +190,16 @@ public class UserViewPanel implements Observable, Observer {
 			
 		});
 		
+		//Scrolls for the text areas
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 269, 330, 119);
+		frame.getContentPane().add(scrollPane);
+		scrollPane.setColumnHeaderView(taNewsFeed);
+		
 		// UPDATES THIS PANEL
 		update(thisUser);
 		updateTextFollowingUser();
 	}
-	
-	/* CHANGE */
 	
 	public void updateFollowers(String message) {
 		
@@ -209,7 +213,7 @@ public class UserViewPanel implements Observable, Observer {
 		}
 		
 		for (int i = 0; i < followers.size(); ++i) {
-			followers.get(i).addToNewsFeed(message);
+			followers.get(i).addToNewsFeed(thisUser.toString() + ": " + message);
 			followers.get(i).getUserPanel().update(thisUser);
 		}
 	}
@@ -276,26 +280,27 @@ public class UserViewPanel implements Observable, Observer {
 		return user.getUserPanel();
 	}
 
-		//UserViewPanel is the Observable
-		@Override
-		public void update(User user) {
-			// TODO Auto-generated method stub
-			
-			String message = "";
-			String userid = null;
-			List<String> newsFeed = user.getNewsFeed();
-			for (int i = 0; i < newsFeed.size(); ++i) {
-				userid = user.toString();
-				message += userid + ": " + newsFeed.get(i) + "\n";
-			}
-			taNewsFeed.append(message);
-			
-		}
-
+	//UserViewPanel is the Observable
 	@Override
-	public void addObject(User u) {
+	public void update(User user) {
 		// TODO Auto-generated method stub
 		
-	}
+		String message = "";
+		List<String> newsFeed = thisUser.getNewsFeed();
 
+		for (int i = 0; i < newsFeed.size(); ++i) {
+			message += newsFeed.get(i) + "\n";
+			taNewsFeed.setText(message);				
+		}
+	}
+	
+	public static int getTotalMessages() {
+		return totalMessagesCounter;
+	}
+	
+	public static String getPositivePercentage() {
+
+		String result = Double.toString((double) (totalPositivePercentage) / (getTotalMessages()) * 100);
+		return result + "%";
+	}
 }

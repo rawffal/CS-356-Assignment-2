@@ -16,17 +16,13 @@ import java.util.ArrayList;
 
 public class CompositeUser implements User {
 	private static int userCounter = 0;
-	private static int messagesTotal = 0;
-	private static int positiveCounter = 0;
 
 	private String id = null;
 	private List<User> usersFollowing; // the list of users being followed by
 										// this user
 	private List<User> followedBy; // the list of users following this user
 	private List<String> newsFeed;
-	private final String[] positiveWords = new String[] { "Good", "Great",
-			"Outstanding", "Perfect", "Good Job", "Excellent", "Awesome",
-			"Beautiful", "Amazing", "Cool" };
+	
 
 	private UserViewPanel userPanel;
 
@@ -44,13 +40,7 @@ public class CompositeUser implements User {
 
 	/* ADDERS METHODS */
 	public void addToNewsFeed(String message) {
-		++messagesTotal;
-		for (int i = 0; i < positiveWords.length; ++i) {
-			if (positiveWords[i].equalsIgnoreCase(message)) {
-				++positiveCounter;
-			}
-		}
-
+		
 		this.newsFeed.add(message);
 
 	}
@@ -87,23 +77,18 @@ public class CompositeUser implements User {
 		return result;
 	}
 
-	public static String getTotalMessages() {
-		String result = Integer.toString(messagesTotal);
-		return result;
-	}
-
-	public static String getPostivePercentage() {
-		String result = Double.toString((double) (positiveCounter)
-				/ (messagesTotal) * 100);
-		return result + "%";
-	}
-
 	public void setUserPanel(UserViewPanel userPanel) {
 		this.userPanel = userPanel;
 	}
 
 	public UserViewPanel getUserPanel() {
 		return this.userPanel;
+	}
+
+	@Override
+	public String getId() {
+		// TODO Auto-generated method stub
+		return this.id;
 	}
 
 }

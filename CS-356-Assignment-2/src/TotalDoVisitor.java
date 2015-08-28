@@ -18,14 +18,15 @@ public class TotalDoVisitor implements IStatisticsVisitor {
 	@Override
 	public String visit(TotalMessages messages) {
 		// TODO Auto-generated method stub
-		return "Total Messages: " + CompositeUser.getTotalMessages(); 
+		String result = Integer.toString(UserViewPanel.getTotalMessages());
+		return "Total Messages: " + result; 
 	}
 
 	@Override
 	public String visit(TotalPositive positive) {
 		// TODO Auto-generated method stub
 		
-		return "Positive Percentage: " + CompositeUser.getPostivePercentage();
+		return "Positive Percentage: " + UserViewPanel.getPositivePercentage();
 	}
 
 }

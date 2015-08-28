@@ -5,6 +5,8 @@ public interface User {
 	
 	public String toString();
 	
+	public String getId();
+	
 	public List<User> getFollowing();
 	
 	public List<User> getFollower();

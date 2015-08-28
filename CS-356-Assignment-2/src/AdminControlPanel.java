@@ -149,6 +149,21 @@ public class AdminControlPanel extends JPanel {
 					{
 						if (selectedNode.getUserObject() instanceof UserGroup)
 						{
+							System.out.println(groups);
+							for (int i = 0; i < users.size(); ++i) {
+								if (users.get(i).getId().equalsIgnoreCase(tfUserID.getText())) {
+									lMessage.setText("Please enter a unique id");
+									return;
+								} 
+							}
+							
+							for (int i = 0; i < groups.size(); ++i ) {
+								if (groups.get(i).getId().equalsIgnoreCase(tfUserID.getText())) {
+									lMessage.setText("Please enter a unique id");
+									return;
+								}
+							}
+							
 							users.add(new CompositeUser(tfUserID.getText()));
 							addUser = new DefaultMutableTreeNode(users.get(users.size() - 1));
 							model.insertNodeInto(addUser, selectedNode, selectedNode.getChildCount());					
@@ -185,6 +200,12 @@ public class AdminControlPanel extends JPanel {
 						}
 						else if (selectedNode.getUserObject() instanceof UserGroup)
 						{
+							for (int i = 0; i < users.size(); ++i) {
+								if (users.get(i).toString().equalsIgnoreCase(tfGroupID.getText())) {
+									lMessage.setText("Please enter a unique id");
+									return;
+								}
+							}
 							groups.add(new UserGroup(tfGroupID.getText()));
 							System.out.println("\n" + groups.get(groups.size() - 1)); //TESTING
 							addGroup = new DefaultMutableTreeNode(groups.get(groups.size() - 1));
@@ -223,7 +244,9 @@ public class AdminControlPanel extends JPanel {
 				}
 				else if (selectedNode.getUserObject() instanceof UserGroup)
 				{
+					
 					lMessage.setText("Select an User ID. Not a group");
+					
 				}
 						
 			}
