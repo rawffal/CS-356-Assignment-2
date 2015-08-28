@@ -2,49 +2,43 @@ import java.util.ArrayList;
 
 public class UserGroup implements User {
 
-	/*
-	 * A user group has an unique ID, which can be used to group users. A user group can
-		contain any number of users. The same user can only be included in one group. Of
-		course, a user group can contain other user groups recursively. There is always a root
-		group called Root to include everything.
+	/**
+	 * A user group has an unique ID, which can be used to group users. A user
+	 * group can contain any number of users. There is always a root group called 
+	 * Root to include everything.
+	 * @author Charles Chuong
 	 */
-	
+
 	private String id = "";
 	private ArrayList<User> usersInGroup;
 	private ArrayList<User> groupsInGroup;
 	private static int groupCounter = 0;
-	
-	public UserGroup(String id)
-	{
+
+	public UserGroup(String id) {
 		this.id = id;
 		usersInGroup = new ArrayList<User>();
 		groupsInGroup = new ArrayList<User>();
 		++groupCounter;
 	}
-	
-	public void add(User user)
-	{
+
+	public void add(User user) {
 		usersInGroup.add(user);
 	}
-	
-	public void addGroup(UserGroup group)
-	{
+
+	public void addGroup(UserGroup group) {
 		groupsInGroup.add(group);
 	}
-	
-	public static String getGroupCounter()
-	{
+
+	public static String getGroupCounter() {
 		String result = Integer.toString(groupCounter);
 		return result;
 	}
-	
-	public String getId()
-	{
+
+	public String getId() {
 		return id;
 	}
-	
-	public String toString()
-	{
+
+	public String toString() {
 		return id + " Group Folder";
 	}
 
@@ -69,19 +63,19 @@ public class UserGroup implements User {
 	@Override
 	public void addFollowing(User u) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void addFollowed(User u) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void addToNewsFeed(String s) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public UserViewPanel getUserPanel() {
@@ -91,7 +85,7 @@ public class UserGroup implements User {
 
 	public void setUserPanel(UserViewPanel userViewPanel) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 }

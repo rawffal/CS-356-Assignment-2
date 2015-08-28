@@ -1,8 +1,5 @@
 
-
-
-public class TotalGroups implements IStatisticsElement{
-	
+public class TotalGroups implements IStatisticsElement {
 
 	@Override
 	public void accept(IStatisticsVisitor visitor) {

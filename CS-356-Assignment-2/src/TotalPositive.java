@@ -1,8 +1,5 @@
 
-
-
-public class TotalPositive implements IStatisticsElement{
-	
+public class TotalPositive implements IStatisticsElement {
 
 	@Override
 	public void accept(IStatisticsVisitor visitor) {

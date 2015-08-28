@@ -1,17 +1,13 @@
 import java.util.List;
 import java.util.ArrayList;
 
-/*
- * 1) Unique ID
- * 2) a list of users that are following this id
- * 3) a list of users that the ID is following
- * 4) a news feed list that contains a list of Twitter messages
- */
-
-/*
- * output the percentage of the positive Tweet messages in all the users' news feed
- * (the message containing positive words, such as good, great, excellent, etc.)
- * Free free to decide the positive words.
+/**
+ * 
+ * The single user class will implement the User interface.
+ * This class is essentially the users that are added within
+ * a group. They hold their own properties.
+ * @author Charles Chuong
+ *
  */
 
 public class SingleUser implements User {
@@ -22,7 +18,6 @@ public class SingleUser implements User {
 										// this user
 	private List<User> followedBy; // the list of users following this user
 	private List<String> newsFeed;
-	
 
 	private UserViewPanel userPanel;
 
@@ -40,7 +35,7 @@ public class SingleUser implements User {
 
 	/* ADDERS METHODS */
 	public void addToNewsFeed(String message) {
-		
+
 		this.newsFeed.add(message);
 
 	}
@@ -48,7 +43,7 @@ public class SingleUser implements User {
 	public void addFollowing(User user) {
 
 		this.usersFollowing.add(user);
-		
+
 	}
 
 	public void addFollowed(User u) {
