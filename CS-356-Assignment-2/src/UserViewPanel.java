@@ -122,24 +122,7 @@ public class UserViewPanel implements Observable, Observer {
 		btnPostTweet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				String tweet = tfTweetMessage.getText();
-				
-				
-				
-				if (tweet.equals("")) {
-					lMessage.setText("Please enter a message");
-				} else if (!tweet.equals("")) { 
-					thisUser.addToNewsFeed(thisUser.toString() + ": " + tweet);
-					update(thisUser);
-					tfTweetMessage.setText("");
-					updateFollowers(tweet);
-				}
-				++totalMessagesCounter;
-				for (int i = 0; i < positiveWords.length; ++i) {
-					if (positiveWords[i].equals(tweet)) {
-						++totalPositivePercentage;
-					}
-				}
+				makeTweetPost();
 				
 			}
 		});	
@@ -254,6 +237,25 @@ public class UserViewPanel implements Observable, Observer {
 			tfUserId.setText("");
 			
 			updateTextFollowingUser();
+		}
+	}
+	
+	public void makeTweetPost() {
+		String tweet = tfTweetMessage.getText();
+		
+		if (tweet.equals("")) {
+			lMessage.setText("Please enter a message");
+		} else if (!tweet.equals("")) { 
+			thisUser.addToNewsFeed(thisUser.toString() + ": " + tweet);
+			update(thisUser);
+			tfTweetMessage.setText("");
+			updateFollowers(tweet);
+		}
+		++totalMessagesCounter;
+		for (int i = 0; i < positiveWords.length; ++i) {
+			if (positiveWords[i].equals(tweet)) {
+				++totalPositivePercentage;
+			}
 		}
 	}
 	

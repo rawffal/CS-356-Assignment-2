@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import java.awt.ScrollPane;
 
 /**
  * The Admin Control Panel class will utilize a Singleton pattern scheme.
@@ -78,37 +79,37 @@ public class AdminControlPanel extends JPanel {
 		model = new DefaultTreeModel(root);
 		tree = new JTree(model);
 		tree.setBounds(10, 11, 381, 413);
-		frame.add(tree);
+		frame.getContentPane().add(tree);
 		
 		/* Label */
 		lMessage = new JLabel("");
 		lMessage.setForeground(Color.RED);
 		lMessage.setBounds(425, 218, 316, 14);
-		frame.add(lMessage);
+		frame.getContentPane().add(lMessage);
 		
 		/* Text Fields */
 		tfUserID = new JTextField("");
 		tfUserID.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 		tfUserID.setBounds(425, 11, 151, 40);
 		tfUserID.setColumns(10);
-		frame.add(tfUserID);
+		frame.getContentPane().add(tfUserID);
 		
 		tfGroupID = new JTextField("");
 		tfGroupID.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 		tfGroupID.setColumns(10);
 		tfGroupID.setBounds(425, 62, 151, 40);
-		frame.add(tfGroupID);
+		frame.getContentPane().add(tfGroupID);
 		
 		/* Buttons */
 		btnMessageTotal = new JButton("Show Messages Total");
 		btnMessageTotal.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 		btnMessageTotal.setBounds(425, 384, 151, 40);
-		frame.add(btnMessageTotal);
+		frame.getContentPane().add(btnMessageTotal);
 		
 		btnPositivePercentage = new JButton("Show Positive Percentage");
 		btnPositivePercentage.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		btnPositivePercentage.setBounds(590, 383, 151, 40);
-		frame.add(btnPositivePercentage);
+		frame.getContentPane().add(btnPositivePercentage);
 		
 		btnAddUser = new JButton("Add User");
 		btnAddUser.setFont(new Font("Times New Roman", Font.PLAIN, 18));
@@ -123,7 +124,7 @@ public class AdminControlPanel extends JPanel {
 		btnOpenUserView = new JButton("Open User View");
 		btnOpenUserView.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		btnOpenUserView.setBounds(425, 113, 316, 40);
-		frame.add(btnOpenUserView);
+		frame.getContentPane().add(btnOpenUserView);
 		
 		btnUserTotal = new JButton("Show User Total");
 		btnUserTotal.setFont(new Font("Times New Roman", Font.PLAIN, 16));
@@ -133,7 +134,7 @@ public class AdminControlPanel extends JPanel {
 		btnGroupTotal = new JButton("Show Group Total");
 		btnGroupTotal.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		btnGroupTotal.setBounds(590, 332, 151, 40);
-		frame.add(btnGroupTotal);
+		frame.getContentPane().add(btnGroupTotal);
 		
 		/* Action Listeners for all the Buttons */
 		btnAddUser.addActionListener(new ActionListener() {
@@ -142,38 +143,26 @@ public class AdminControlPanel extends JPanel {
 				addUsers();
 			}
 		});
-		frame.add(btnAddUser);
+		frame.getContentPane().add(btnAddUser);
 		
 		btnAddGroup.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addGroups();
 			}
 		});
-		frame.add(btnAddGroup);
+		frame.getContentPane().add(btnAddGroup);
 		
 		btnOpenUserView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-				
-				if (selectedNode == null) {
-					
-					lMessage.setText("Select a user");
-					
-				}
-				else if (selectedNode.getUserObject() instanceof SingleUser)
-				{
-					User selectedUser = (SingleUser) selectedNode.getUserObject();	
-					
-					UserViewPanel.getInstance(selectedUser);
-				}
-				else if (selectedNode.getUserObject() instanceof UserGroup)
-				{
-					lMessage.setText("Select an User ID. Not a group");		
-				}
+				openView();
 			}
 		});
-		frame.add(btnUserTotal);
+		frame.getContentPane().add(btnUserTotal);
+		
+		ScrollPane scrollPane = new ScrollPane();
+		scrollPane.setBounds(365, 11, 26, 413);
+		frame.getContentPane().add(scrollPane);
 		
 		
 		/* Using the Visitor Pattern for statistics */
@@ -301,6 +290,26 @@ public class AdminControlPanel extends JPanel {
 		}
 	}
 	
+	public void openView() {
+		selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+		
+		if (selectedNode == null) {
+			
+			lMessage.setText("Select a user");
+			
+		}
+		else if (selectedNode.getUserObject() instanceof SingleUser)
+		{
+			User selectedUser = (SingleUser) selectedNode.getUserObject();	
+			
+			UserViewPanel.getInstance(selectedUser);
+		}
+		else if (selectedNode.getUserObject() instanceof UserGroup)
+		{
+			lMessage.setText("Select an User ID. Not a group");		
+		}
+	}
+	
 	public List<User> getUsers()
 	{
 		return users;
@@ -318,6 +327,4 @@ public class AdminControlPanel extends JPanel {
 		}
 		return instance;
 	}
-	
-	
 }
